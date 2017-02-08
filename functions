@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Usage: extract <file>
+# Description: extracts archived files
+extract() {
+  if [ -f $1 ]; then
+    case $1 in
+      *.tar.bz2) tar -xjf $1  ;;
+      *.bz2)     bzip2 -dk $1 ;;
+			*.tar.gz)  tar -xzf $1  ;;
+      *.gz)      gzip -dk $1  ;;
+			*.tar.xz)  tar -Jxvf $1 ;;
+      *.xz)      tar -Jxvf $1 ;;
+			*.tar)     tar -xf $1   ;;
+			*.taz)     tar -xzf $1  ;;
+			*.tb2)     tar -xjf $1  ;;
+			*.tbz)     tar -xjf $1  ;;
+			*.tbz2)    tar -xjf $1  ;;
+			*.tgz)     tar -xzf $1  ;;
+			*.txz)     tar -Jxvf $1 ;;
+			*.zip)     unzip $1     ;;
+      *)         echo "'$1' cannot be extracted/mounted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+# Usage: startapache
+# Description: starts apache webserver
+startapache() {
+  START="sudo service apache2 start"
+  PGREP="/usr/bin/pgrep" # path to pgrep command
+  HTTPD="apache2" # Httpd daemon name
+  $PGREP ${HTTPD} # find httpd pid
+  if [ $? -ne 0 ]; then # if apache is not running
+    $START
+  fi
+}
+
+# Usage: stopapache
+# Description: stops apache webserver (different than start command above for reference)
+stopapache() {
+  SERVICE="apache2"
+  STOP="sudo service apache2 stop"
+  if (( $(ps -ef | grep -v grep | grep $SERVICE | wc -l) > 0 )); then # if apache not running
+    $STOP
+  fi
+}
+
+# Usage: calibre
+# Description: upgrade calibre to lastest verion
+calibre() {
+  wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+}
+
+# Usage: a <directory>
+# Description: `a` with no arguments opens the current directory in Atom Editor, otherwise opens the given location
+function a() {
+	if [ $# -eq 0 ]; then
+		atom .;
+	else
+		atom "$@";
+	fi;
+}
+
+# Usage: symlinkdotfiles
+# Description: Creates a symbolic link of files in ~/.dotfiles to home directory (and refreshes existing links with -f).
+symlinkdotfiles() {
+  DIR=${PWD}
+  cd ~/.dotfiles || exit
+  FILES="*"
+  for FILE in $FILES; do
+    ln -sf ~/.dotfiles/$FILE ~/.$FILE;
+  done
+  cd $DIR || exit
+}

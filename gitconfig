@@ -1,0 +1,9 @@
+[user]
+	name = Brad West
+	email = brad@bradonomics.com
+[push]
+	default = simple
+[color]
+	ui = true
+[core]
+	excludesfile = /home/brad/.gitignore
