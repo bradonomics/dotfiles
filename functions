@@ -64,14 +64,82 @@ function a() {
 	fi;
 }
 
+# Usage: symlinkallthethings
+# Description: Runs all symlink functions (usful when installing a new system)
+symlinkallthethings() {
+  symlinkdotfiles
+  symlinkbin
+  symlinkfonts
+}
+
 # Usage: symlinkdotfiles
-# Description: Creates a symbolic link of files in ~/.dotfiles to home directory (and refreshes existing links with -f).
+# Description: Creates a symbolic link of files in ~/.dotfiles to ~/ (and refreshes existing links with -f).
 symlinkdotfiles() {
+  # Grab our current directory so we can get back there after the magic happes.
   DIR=${PWD}
+
+  # Move to the /bin directory in our dotfiles repo
   cd ~/.dotfiles || exit
+
+  # Grab all the files and loop through them adding a symlink
   FILES="*"
   for FILE in $FILES; do
     ln -sf ~/.dotfiles/$FILE ~/.$FILE;
   done
+
+  # Go back to the directory where we started
+  cd $DIR || exit
+}
+
+# Usage: symlinkbin
+# Description: Creates a symbolic link of files in ~/.dotfiles/bin to ~/bin (and refreshes existing links with -f).
+symlinkbin() {
+  # Grab our current directory so we can get back there after the magic happes.
+  DIR=${PWD}
+
+  # If there isn't already a bin directory, create one
+  if [ ! -d ~/bin ]; then
+    mkdir -p ~/bin;
+  fi
+
+  # Move to the /bin directory in our dotfiles repo
+  cd ~/.dotfiles/bin || exit
+
+  # Grab all the files and loop through them adding a symlink
+  FILES="*"
+  for FILE in $FILES; do
+    ln -sf ~/.dotfiles/bin/$FILE ~/bin/$FILE;
+  done
+
+  # Move the the ~/bin directory and make all files executable
+  cd ~/bin || exit
+  FILES="*"
+  for FILE in $FILES; do
+    chmod +x $FILE;
+  done
+
+  # Go back to the directory where we started
+  cd $DIR || exit
+}
+
+# Usage: symlinkfonts
+# Description: Creates a symbolic link of files in ~/.dotfiles/fonts to ~/.fonts (and refreshes existing links with -f).
+symlinkfonts() {
+  # Grab our current directory so we can get back there after the magic happes.
+  DIR=${PWD}
+
+  # Move to the /bin directory in our dotfiles repo
+  cd ~/.dotfiles/fonts || exit
+
+  # Grab all the files and loop through them adding a symlink
+  FILES="*"
+  for FILE in $FILES; do
+    ln -sf ~/.dotfiles/fonts/$FILE ~/.fonts/$FILE;
+  done
+
+  # Rebuild font cache
+  fc-cache -fv
+
+  # Go back to the directory where we started
   cd $DIR || exit
 }
