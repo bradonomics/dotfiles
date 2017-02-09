@@ -10,21 +10,17 @@ Not really dotfiles, but similar enough I didn't want to create another repo.
 
 This script installs WordPress. Although if I need to tell you that, you are probably beyond helping. It first checks to see if Apache is running and starts it if it's not. It downloads WordPress, then asks about your MySQL settings to configure your wp-config.php file.
 
-### install-genesis-boilerplate.sh & install-jekyll-boilerplate.sh
+### install-genesis.sh & install-jekyll.sh
 
 These are basically the same. They download theme files, make a few arrangements, and install Gulp.
 
 ### install-wordpress-genesis.sh
 
-This is a combination of install-wordpress.sh and install-genesis-boilerplate.sh.
-
-### start-apache.sh & stop-apache.sh
-
-You'll notice they use different methods to find the service. I'm not sure that one is better than the other, but I keep both for reference.
+This installs WordPress just like install-wordpress.sh but then adds [Genesis Boilerplate](https://github.com/bradonomics/genesis-boilerplate), same as install-genesis.sh.
 
 ### webniyom-build-demos.sh
 
-This is just a build utility for Jekyll sites. In my [WebNiyom](https://webniyom.com/en/) projects I keep a branch called template which is a copy of master except for the _config.yml file which holds the site.url for the demo. After making changes that get merged to master, I run this script to build the site in a different directory and push those changes to the server to demo the changes.
+This is a build utility for Jekyll sites. To build [WebNiyom](https://webniyom.com/en/) demos this script updates the master branch site.url in _config.yml. It then builds the site in a different directory and pushes those changes to the demo server, then dumps the changes to the config file.
 
 ### linux-install.sh
 
