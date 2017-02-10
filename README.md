@@ -2,6 +2,20 @@
 
 This repo is a work in progress. I'm getting ready to move to Mint 18.1 (or 18.2 if it gets here by then) and wanted a back up of my dotfiles and scripts. I also thought since I've taken liberally from other's dotfiles I'd load mine here as a way of paying back the community.
 
+## /fonts
+
+Since most designers use MacOS and Linux doesn't come with Helvetica, I keep the Helvetica font family in my .fonts directory so I can see the internet as others do.
+
+Oxygen Mono ([available on Google Fonts](https://fonts.google.com/specimen/Oxygen+Mono)) is my preferred monospace system font. I use it in my terminal, code editor, and other places where l, 1, I, O, and 0 are difficult to tell apart.
+
+## /config
+
+This houses my redshift.conf file. Read more about [Redshift here](http://jonls.dk/redshift/).
+
+## /gnome2/accels
+
+This houses my nemo settings, for the moment only for this line: `(gtk_accel_path "<Actions>/DirViewActions/New Empty Document" "<Primary><Shift>f")` which adds the keyboard shortcut for creating a new text document.
+
 ## /bin directory
 
 Not really dotfiles, but similar enough I didn't want to create another repo.
