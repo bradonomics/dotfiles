@@ -54,9 +54,9 @@ while [[ -n $1 ]]; do
   shift
 done
 
-echo "You should be in the parent directory where you want to install your new theme files."
-echo "If you already created the project directory, abort this script, delete the project directory, and start again."
-read -r -p "Are you in the parent directory? [y/N] " RESPONSE
+echo "You should be in the project directory where you want to install your Jekyll project."
+echo "If you are not in the project directory, abort this script, create the project directory, and start again."
+read -r -p "Are you in the poject directory? [y/N] " RESPONSE
 
 RESPONSE=${RESPONSE,,}
 
@@ -64,21 +64,18 @@ if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
   graceful_exit
 else
 
-  # Get the project name
-  echo -ne "What is the project name (child theme directory name): "
-  read PROJECTNAME
-
   # Download Jekyll Boilerplate theme files
   wget https://github.com/bradonomics/jekyll-boilerplate/archive/master.tar.gz
 
   # Unzip Jekyll Boilerplate theme files
-  tar -zxf master.tar.gz && mv jekyll-boilerplate-master $PROJECTNAME
+  tar -zxf master.tar.gz
+  cd jekyll-boilerplate-master || error_exit "Failed to change directories."
+  cp -rpf * ../
+  cd ../ || error_exit "Failed to change directories."
 
   # Delete Jekyll Boilerplate zip flies
+  rm -rf jekyll-boilerplate-master/
   rm -f master.tar.gz
-
-  # Move into child theme directory
-  cd $PROJECTNAME || error_exit "Failed to change directories."
 
   # Download latest normalize.css file, rename it, and move it into dev/scss directory
   wget https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css
