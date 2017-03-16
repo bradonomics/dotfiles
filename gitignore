@@ -1,11 +1,13 @@
+cloudcannon*
+
 ### Jekyll ###
 _site
-.sass-cache
 .jekyll-metadata
 Gemfile.lock
 
 
 ### Gulp ###
+.sass-cache
 package.json
 /node_modules/
 
@@ -15,7 +17,25 @@ package.json
 .sftpconfig
 
 
-### Compiled Source ###
+### WordPress ###
+wp-config.php
+wp-config-local.php
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/wp-cache-config.php
+wp-content/plugins/hello.php
+
+
+### Apache ###
+.htaccess
+
+
+### Compiled Source ##
 *.com
 *.class
 *.dll
