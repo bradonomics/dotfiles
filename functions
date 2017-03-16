@@ -5,19 +5,19 @@
 extract() {
   if [ -f $1 ]; then
     case $1 in
-      *.tar.bz2) tar -xjf $1  ;;
+      *.tar.bz2) tar -jxf $1  ;;
       *.bz2)     bzip2 -dk $1 ;;
 			*.tar.gz)  tar -xzf $1  ;;
       *.gz)      gzip -dk $1  ;;
-			*.tar.xz)  tar -Jxvf $1 ;;
-      *.xz)      tar -Jxvf $1 ;;
+			*.tar.xz)  tar -Jxf $1  ;;
+      *.xz)      tar -Jxf $1  ;;
 			*.tar)     tar -xf $1   ;;
 			*.taz)     tar -xzf $1  ;;
-			*.tb2)     tar -xjf $1  ;;
-			*.tbz)     tar -xjf $1  ;;
-			*.tbz2)    tar -xjf $1  ;;
+			*.tb2)     tar -jxf $1  ;;
+			*.tbz)     tar -jxf $1  ;;
+			*.tbz2)    tar -jxf $1  ;;
 			*.tgz)     tar -xzf $1  ;;
-			*.txz)     tar -Jxvf $1 ;;
+			*.txz)     tar -Jxf $1  ;;
 			*.zip)     unzip $1     ;;
       *)         echo "'$1' cannot be extracted/mounted via extract()" ;;
     esac
@@ -70,6 +70,7 @@ symlinkallthethings() {
   symlinkdotfiles
   symlinkbin
   symlinkfonts
+  symlinkredshift
 }
 
 # Usage: symlinkdotfiles
@@ -78,7 +79,7 @@ symlinkdotfiles() {
   # Grab our current directory so we can get back there after the magic happes.
   DIR=${PWD}
 
-  # Move to the /bin directory in our dotfiles repo
+  # Move to the ~/.dotfiles directory
   cd ~/.dotfiles || exit
 
   # Grab all the files and loop through them adding a symlink
@@ -139,6 +140,25 @@ symlinkfonts() {
 
   # Rebuild font cache
   fc-cache -fv
+
+  # Go back to the directory where we started
+  cd $DIR || exit
+}
+
+# Usage: symlinkredshift
+# Description: Creates a symbolic link of ~/.dotfiles/config to ~/.config (and refreshes existing links with -f).
+symlinkredshift() {
+  # Grab our current directory so we can get back there after the magic happes.
+  DIR=${PWD}
+
+  # Move to the /bin directory in our dotfiles repo
+  cd ~/.dotfiles/config || exit
+
+  # Grab all the files and loop through them adding a symlink
+  FILES="*"
+  for FILE in $FILES; do
+    ln -sf ~/.dotfiles/config/$FILE ~/.config/$FILE;
+  done
 
   # Go back to the directory where we started
   cd $DIR || exit
