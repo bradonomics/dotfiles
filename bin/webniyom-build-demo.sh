@@ -15,14 +15,18 @@
 
 PROGNAME=${0##*/}
 
+clean_up() { # Perform pre-exit housekeeping
+  return
+}
+
 error_exit() {
   echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
-  return
+  clean_up
   exit 1
 }
 
 graceful_exit() {
-  return
+  clean_up
   exit
 }
 

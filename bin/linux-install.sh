@@ -15,14 +15,18 @@
 
 PROGNAME=${0##*/}
 
+clean_up() { # Perform pre-exit housekeeping
+  return
+}
+
 error_exit() {
   echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
-  return
+  clean_up
   exit 1
 }
 
 graceful_exit() {
-  return
+  clean_up
   exit
 }
 
@@ -44,7 +48,7 @@ trap "signal_exit INT"  INT
 
 # Check for root UID
 if [[ $(id -u) != 0 ]]; then
-  error_exit "You must use `sudo` to run this script."
+  error_exit "You must use 'sudo' to run this script."
 fi
 
 # Parse command-line
@@ -61,17 +65,19 @@ done
 
 # Array of packages to remove with a single apt remove command
 apt_package_remove_list=(
+  rhythmbox
+  pidgin
   brasero
   brasero-cdrkit
-  gimp
   hexchat
-  # libreoffice-draw
-  # libreoffice-math
-  pidgin
-  rhythmbox
   thunderbird
   transmission-gtk
   laptop-mode-tools
+  cheese
+  aisleriot
+  gnome-mahjongg
+  gnome-mines
+  gnome-sudoku
 )
 
 # Array of PPAs to add with a single add-apt-repository command
@@ -84,10 +90,14 @@ ppa_install_list=(
   ppa:webupd8team/atom
   ppa:webupd8team/unstable
   ppa:numix/ppa
+  ppa:embrosyn/cinnamon
 )
 
 # Array of packages to install with a single apt install command
 apt_package_install_list=(
+  gdebi
+  curl
+  cinnamon
   atom
   git
   git-core
@@ -100,9 +110,8 @@ apt_package_install_list=(
   simplescreenrecorder
   numix-icon-theme
   numix-icon-theme-square
-  nodejs
-  build-essential
   skype
+  evolution
 )
 
 package_remove() {
@@ -121,35 +130,62 @@ ppa_install() {
     add-apt-repository -y $ppa;
   done
 
-  # Add additional repos
-  curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  # Add Canonical Partner Repos
+  add-apt-repository -y "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
 }
 
 package_install() {
   # Update all of the package references before installing anything
   apt update
 
-  # Install required packages
+  # Install apt packages
   for package in "${apt_package_install_list[@]}"; do
     apt install -y $package;
   done
 
+  # Install Google Chrome
+  wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  gdebi --non-interactive google-chrome-stable_current_amd64.deb
+  rm -f google-chrome-stable_current_amd64.deb
+
+  # Install Skype for Linux
+  wget https://repo.skype.com/latest/skypeforlinux-64.deb
+  gdebi --non-interactive skypeforlinux-64.deb
+  rm -f skypeforlinux-64.deb
+
+  # Install Calibre
+  wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+
+  # Install GitKraken
+  wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
+  gdebi --non-interactive gitkraken-amd64.deb
+  rm -f gitkraken-amd64.deb
+
+  # Install Mint-Y Theme Files
+  wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.1.5_all.deb
+  gdebi --non-interactive mint-y-theme_1.1.5_all.deb
+  rm -f mint-y-theme_1.1.5_all.deb
+
+  # Install WP CLI
+  wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  chmod +x wp-cli.phar
+  mv wp-cli.phar /usr/local/bin/wp
+  wget https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
+  mv -f wp-completion.bash $HOME/.wp-completion.bash
+
+  # Install Node
+  curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  apt install -y nodejs build-essential
+
+  # Run Upgrader
+  apt upgrade -y
+
   # Clean up apt caches
-  apt-get clean
+  apt autoclean
 }
 
-# Remove all the unwanted software installed by default.
+# Remove all the unwanted software installed by default
 package_remove
-
-# Open the Mint Updater.
-mintupdate
-
-# Pause the script so the Mint update options can be set.
-echo ""
-echo "Go to the Linux Mint updater and select your update policy."
-echo "Using the Mint Updater install the avaliable updates."
-echo ""
-read -p "Then press the [Enter] key to restart this script."
 
 # Add all PPAs
 ppa_install
@@ -157,43 +193,19 @@ ppa_install
 # Install new software
 package_install
 
-# Install Google Chrome
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-gdebi --non-interactive google-chrome-stable_current_amd64.deb
-rm -f google-chrome-stable_current_amd64.deb
-
-# Install Skype for Linux Alpha
-wget https://repo.skype.com/latest/skypeforlinux-64-alpha.deb
-gdebi --non-interactive skypeforlinux-64-alpha.deb
-rm -f skypeforlinux-64-alpha.deb
-
-# Install Calibre
-wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
-
-# Install GitKraken
-wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
-gdebi --non-interactive gitkraken-amd64.deb
-rm -f gitkraken-amd64.deb
-
-# Install WP CLI
-wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
-wget https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
-mv -f wp-completion.bash $HOME/.wp-completion.bash
-
-# Install Gulp
-npm install --global gulp-cli
-
 # Install Atom Sync Settings package
 apm install sync-settings
 
-# Change system settings
-# Set Number of Workspaces to 2:
-gsettings set org.cinnamon.desktop.wm.preferences num-workspaces 2
+# Change ownership of .atom directory
+chown $USER:$USER $HOME/.atom
 
 # exit
 graceful_exit
+
+
+# Change system settings
+# Set Number of Workspaces to 2:
+# gsettings set org.cinnamon.desktop.wm.preferences num-workspaces 2
 
 
 # Install Apache
