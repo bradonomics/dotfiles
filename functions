@@ -48,6 +48,25 @@ stopapache() {
   fi
 }
 
+# Usage: gulpinstall
+# Description: Prompts for project type, initializes node package manager, and installs gulp
+gulpinstall() {
+  # Create package.json file
+  npm init
+
+  # WordPress or Jekyll
+  read -r -p "Is this a WordPress or Jekyll project? [w/j] " RESPONSE
+  RESPONSE=${RESPONSE,,}
+
+  if [[ $RESPONSE == w ]]; then
+    npm install --save-dev gulp gulp-sass gulp-autoprefixer gulp-cssnano gulp-concat gulp-uglify gulp-rename browser-sync
+  elif [[ $RESPONSE == j ]]; then
+    npm install --save-dev gulp gulp-shell gulp-concat gulp-uglify gulp-rename browser-sync
+  else
+    echo "You must select 'w' for WordPress or 'j' for Jekyll."
+  fi
+}
+
 # Usage: calibre
 # Description: upgrade calibre to lastest verion
 calibre() {
