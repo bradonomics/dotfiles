@@ -107,7 +107,7 @@ else
     # Unzip WordPress files
     tar -zxf latest.tar.gz
     cd wordpress || error_exit "Failed to change directories."
-    cp -rpf * ../
+    cp -rpf ./* ../
     cd ../ || error_exit "Failed to change directories."
     rm -rf wordpress/
     rm -f latest.tar.gz

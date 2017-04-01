@@ -73,7 +73,7 @@ else
   PGREP="/usr/bin/pgrep" # path to pgrep command
   HTTPD="apache2" # Httpd daemon name
   $PGREP ${HTTPD} # find httpd process id
-  if [ $? -ne 0 ]; then # if apache is not running
+  if [[ $? -ne 0 ]]; then # if apache is not running
     $START
   fi
 
@@ -107,7 +107,7 @@ else
     # Unzip WordPress files
     tar zxf latest.tar.gz
     cd wordpress || error_exit "Failed to change directories."
-    cp -rpf * ../
+    cp -rpf ./* ../
     cd ../ || error_exit "Failed to change directories."
     rm -rf wordpress/
     rm -f latest.tar.gz

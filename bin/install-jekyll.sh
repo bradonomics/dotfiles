@@ -74,7 +74,7 @@ else
   # Unzip Jekyll Boilerplate theme files
   tar -zxf master.tar.gz
   cd jekyll-boilerplate-master || error_exit "Failed to change directories."
-  cp -rpf * ../
+  cp -rpf ./* ../
   cd ../ || error_exit "Failed to change directories."
 
   # Delete Jekyll Boilerplate zip flies
