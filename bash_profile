@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck source=/dev/null
 
 # Add ~/bin directory to $PATH
 if [ -d "$HOME/bin" ]; then

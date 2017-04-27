@@ -66,32 +66,30 @@ RESPONSE=${RESPONSE,,}
 
 if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
   graceful_exit
-else
-
-  # Download Jekyll Boilerplate theme files
-  wget https://github.com/bradonomics/jekyll-boilerplate/archive/master.tar.gz
-
-  # Unzip Jekyll Boilerplate theme files
-  tar -zxf master.tar.gz
-  cd jekyll-boilerplate-master || error_exit "Failed to change directories."
-  cp -rpf ./* ../
-  cd ../ || error_exit "Failed to change directories."
-
-  # Delete Jekyll Boilerplate zip flies
-  rm -rf jekyll-boilerplate-master/
-  rm -f master.tar.gz
-
-  # Download latest normalize.css file, rename it, and move it into dev/scss directory
-  wget https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css
-  mv -f normalize.css _sass/normalize.scss
-
-  # Install gulp
-  npm init
-  npm install --save-dev gulp gulp-shell gulp-concat gulp-uglify gulp-rename browser-sync
-
-  # Output "finished" note
-  echo "Everything should now be setup and ready for you to start your new Jekyll project."
-
 fi
+
+# Download Jekyll Boilerplate theme files
+wget https://github.com/bradonomics/jekyll-boilerplate/archive/master.tar.gz
+
+# Unzip Jekyll Boilerplate theme files
+tar -zxf master.tar.gz
+cd jekyll-boilerplate-master || error_exit "Failed to change directories."
+cp -rpf ./* ../
+cd ../ || error_exit "Failed to change directories."
+
+# Delete Jekyll Boilerplate zip flies
+rm -rf jekyll-boilerplate-master/
+rm -f master.tar.gz
+
+# Download latest normalize.css file, rename it, and move it into dev/scss directory
+wget https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css
+mv -f normalize.css _sass/normalize.scss
+
+# Install gulp
+npm init
+npm install --save-dev gulp gulp-shell gulp-concat gulp-uglify gulp-rename browser-sync
+
+# Output "finished" note
+echo "Everything should now be setup and ready for you to start your new Jekyll project."
 
 graceful_exit

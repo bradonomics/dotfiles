@@ -64,6 +64,7 @@ gulpinstall() {
     npm install --save-dev gulp gulp-shell gulp-concat gulp-uglify gulp-rename browser-sync
   else
     echo "You must select 'w' for WordPress or 'j' for Jekyll."
+    echo "Try again."
   fi
 }
 
@@ -102,7 +103,7 @@ symlinkdotfiles() {
   cd ~/.dotfiles || exit
 
   # Grab all the files and loop through them adding a symlink
-  FILES="*"
+  FILES="find . -maxdepth 1 -type f"
   for FILE in $FILES; do
     ln -sf ~/.dotfiles/$FILE ~/.$FILE;
   done

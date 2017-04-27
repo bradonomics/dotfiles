@@ -66,47 +66,45 @@ RESPONSE=${RESPONSE,,}
 
 if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
   graceful_exit
-else
-
-  # Get the project name
-  echo -ne "What is the project name (child theme directory name): "
-  read -s PROJECTNAME
-
-  # Download Genesis Boilerplate theme files
-  wget https://github.com/bradonomics/genesis-boilerplate/archive/master.tar.gz
-
-  # Unzip Genesis Boilerplate theme files
-  tar zxf master.tar.gz && mv genesis-boilerplate-master $PROJECTNAME
-
-  # Delete Genesis Boilerplate zip flies
-  rm -f master.tar.gz
-
-  # Move into child theme directory
-  cd $PROJECTNAME || error_exit "Failed to change directories."
-
-  # Download latest normalize.css file, rename it, and move it into dev/scss directory
-  wget https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css
-  mv -f normalize.css dev/scss/_normalize.scss
-
-  # Install gulp
-  npm init
-  npm install --save-dev gulp gulp-sass gulp-autoprefixer gulp-cssnano gulp-concat gulp-uglify gulp-rename browser-sync
-
-  # Add project name to gulpfile
-  sed -i "s/geneplate/${PROJECTNAME}/g" "gulpfile.js"
-
-  # Build style.css
-  gulp css
-
-  # Check if WP CLI is installed and activate Genesis Boilerplate theme
-  if command -v wp >/dev/null; then
-    wp theme activate $DATABASENAME
-  fi
-
-  # Output "finished" note
-  echo "Everything should now be setup and ready for you to start your new Genesis child theme."
-  echo "If you don't have WP CLI installed you'll need to activate your child theme before it'll work."
-
 fi
+
+# Get the project name
+echo -ne "What is the project name (child theme directory name): "
+read -s PROJECTNAME
+
+# Download Genesis Boilerplate theme files
+wget https://github.com/bradonomics/genesis-boilerplate/archive/master.tar.gz
+
+# Unzip Genesis Boilerplate theme files
+tar zxf master.tar.gz && mv genesis-boilerplate-master $PROJECTNAME
+
+# Delete Genesis Boilerplate zip flies
+rm -f master.tar.gz
+
+# Move into child theme directory
+cd $PROJECTNAME || error_exit "Failed to change directories."
+
+# Download latest normalize.css file, rename it, and move it into dev/scss directory
+wget https://raw.githubusercontent.com/necolas/normalize.css/master/normalize.css
+mv -f normalize.css dev/scss/_normalize.scss
+
+# Install gulp
+npm init
+npm install --save-dev gulp gulp-sass gulp-autoprefixer gulp-cssnano gulp-concat gulp-uglify gulp-rename browser-sync
+
+# Add project name to gulpfile
+sed -i "s/geneplate/${PROJECTNAME}/g" "gulpfile.js"
+
+# Build style.css
+gulp css
+
+# Check if WP CLI is installed and activate Genesis Boilerplate theme
+if command -v wp >/dev/null; then
+  wp theme activate $DATABASENAME
+fi
+
+# Output "finished" note
+echo "Everything should now be setup and ready for you to start your new Genesis child theme."
+echo "If you don't have WP CLI installed you'll need to activate your child theme before it'll work."
 
 graceful_exit

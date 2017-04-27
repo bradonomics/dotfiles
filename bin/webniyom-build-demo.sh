@@ -62,45 +62,41 @@ done
 
 # Check if on master branch and abort if not.
 if [[ $(git rev-parse --abbrev-ref HEAD) != "master" ]]; then
-
   error_exit "You should be on the master branch."
+fi
 
 # Check for file changes and abort if found.
-elif [[ -n $(git status -s) ]]; then
-
+if [[ -n $(git status -s) ]]; then
   error_exit "Commit all your changes before continuing."
-
-else
-
-  # get the template name (directory name)
-  TEMPLATE=${PWD##*/}
-
-  sed -i "s|url:.*|url: https://demo.webniyom.com/$TEMPLATE|" _config.yml
-
-  # Build Jekyll and output to the demo.webniyom.com project directory
-  jekyll build --destination /home/brad/Projects/demo.webniyom.com/$TEMPLATE
-
-  cd /home/brad/Projects/demo.webniyom.com/$TEMPLATE || error_exit "Failed to change directories."
-
-  # grep for url("/ in css and add the template name so the demo will display images and fonts correctly
-  grep -rl 'url("/' css/ | xargs sed -i "s|url(\"/|url(\"/$TEMPLATE/|g"
-
-  # grep for src="/ in index files and add the template name so images and scripts will work in the demo
-  grep -rl 'src="/' --include index.html ./ | xargs sed -i "s|src=\"/|src=\"/$TEMPLATE/|g"
-
-  # grep for href="/ in index files and add the template name so links will work in the demo
-  grep -rl 'href="/' --include index.html ./ | xargs sed -i "s|href=\"/|href=\"/$TEMPLATE/|g"
-
-  git add .
-
-  git commit -m "new build of $TEMPLATE template" --verbose
-
-  git push
-
-  cd /home/brad/Projects/webniyom-themes/$TEMPLATE || error_exit "Failed to change directories."
-
-  git checkout -- _config.yml
-
 fi
+
+# get the template name (directory name)
+TEMPLATE=${PWD##*/}
+
+sed -i "s|url:.*|url: https://demo.webniyom.com/$TEMPLATE|" _config.yml
+
+# Build Jekyll and output to the demo.webniyom.com project directory
+jekyll build --destination /home/brad/Projects/demo.webniyom.com/$TEMPLATE
+
+cd /home/brad/Projects/demo.webniyom.com/$TEMPLATE || error_exit "Failed to change directories."
+
+# grep for url("/ in css and add the template name so the demo will display images and fonts correctly
+grep -rl 'url("/' css/ | xargs sed -i "s|url(\"/|url(\"/$TEMPLATE/|g"
+
+# grep for src="/ in index files and add the template name so images and scripts will work in the demo
+grep -rl 'src="/' --include index.html ./ | xargs sed -i "s|src=\"/|src=\"/$TEMPLATE/|g"
+
+# grep for href="/ in index files and add the template name so links will work in the demo
+grep -rl 'href="/' --include index.html ./ | xargs sed -i "s|href=\"/|href=\"/$TEMPLATE/|g"
+
+git add .
+
+git commit -m "new build of $TEMPLATE template" --verbose
+
+git push
+
+cd /home/brad/Projects/webniyom-themes/$TEMPLATE || error_exit "Failed to change directories."
+
+git checkout -- _config.yml
 
 graceful_exit

@@ -66,65 +66,63 @@ RESPONSE=${RESPONSE,,}
 
 if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
   graceful_exit
-else
+fi
 
-  # Check if Apache is running and start it if not
-  START="sudo service apache2 start"
-  PGREP="/usr/bin/pgrep" # path to pgrep command
-  HTTPD="apache2" # Httpd daemon name
-  $PGREP ${HTTPD} # find httpd process id
-  if [ $? -ne 0 ]; then # if apache is not running
-    $START
-  fi
+# Check if Apache is running and start it if not
+START="sudo service apache2 start"
+PGREP="/usr/bin/pgrep" # path to pgrep command
+HTTPD="apache2" # Httpd daemon name
+$PGREP ${HTTPD} # find httpd process id
+if [ $? -ne 0 ]; then # if apache is not running
+  $START
+fi
 
-  # Get the directory name for use as the MySQL database name
-  DATABASENAME=${PWD##*/}
+# Get the directory name for use as the MySQL database name
+DATABASENAME=${PWD##*/}
 
-  # Ask for MySQL root password
-  echo -ne "What is the password for your MySQL root account: "
-  read -s MYSQLPASS
+# Ask for MySQL root password
+echo -ne "What is the password for your MySQL root account: "
+read -s MYSQLPASS
 
-  # Create the database
-  mysql -u root -p"$MYSQLPASS" -e "CREATE DATABASE IF NOT EXISTS \`$DATABASENAME\`;"
+# Create the database
+mysql -u root -p"$MYSQLPASS" -e "CREATE DATABASE IF NOT EXISTS \`$DATABASENAME\`;"
 
-  # Check if WP CLI is installed and use it if so
-  if command -v wp >/dev/null; then
+# Check if WP CLI is installed and use it if so
+if command -v wp >/dev/null; then
 
-    # Download latest WordPress
-    wp core download
+  # Download latest WordPress
+  wp core download
 
-    # Create a wp-config.php file
-    wp core config --dbname=$DATABASENAME --dbuser=root --dbpass=$MYSQLPASS
+  # Create a wp-config.php file
+  wp core config --dbname=$DATABASENAME --dbuser=root --dbpass=$MYSQLPASS
 
-    # Do the WordPress Install
-    wp core install --url="http://local.dev/$DATABASENAME" --title="$DATABASENAME" --admin_user="brad" --admin_password="brad" --admin_email="not@relevent.com"
+  # Do the WordPress Install
+  wp core install --url="http://local.dev/$DATABASENAME" --title="$DATABASENAME" --admin_user="brad" --admin_password="brad" --admin_email="not@relevent.com"
 
-  else # If WP CLI isn't istalled do it manually
+else # If WP CLI isn't istalled do it manually
 
-    # Download latest WordPress
-    wget http://wordpress.org/latest.tar.gz
+  # Download latest WordPress
+  wget http://wordpress.org/latest.tar.gz
 
-    # Unzip WordPress files
-    tar -zxf latest.tar.gz
-    cd wordpress || error_exit "Failed to change directories."
-    cp -rpf ./* ../
-    cd ../ || error_exit "Failed to change directories."
-    rm -rf wordpress/
-    rm -f latest.tar.gz
+  # Unzip WordPress files
+  tar -zxf latest.tar.gz
+  cd wordpress || error_exit "Failed to change directories."
+  cp -rpf ./* ../
+  cd ../ || error_exit "Failed to change directories."
+  rm -rf wordpress/
+  rm -f latest.tar.gz
 
-    # Create wp-config.php from wp-config-sample.php
-    cp wp-config-sample.php wp-config.php
+  # Create wp-config.php from wp-config-sample.php
+  cp wp-config-sample.php wp-config.php
 
-    # Add database name to wp-config.php
-    sed -i "s/database_name_here/${DATABASENAME}/g" "wp-config.php"
+  # Add database name to wp-config.php
+  sed -i "s/database_name_here/${DATABASENAME}/g" "wp-config.php"
 
-    # Add database username to wp-config.php
-    sed -i "s/username_here/root/g" "wp-config.php"
+  # Add database username to wp-config.php
+  sed -i "s/username_here/root/g" "wp-config.php"
 
-    # Add MySQL root password to add to wp-config.php
-    sed -i "s/password_here/${MYSQLPASS}/g" "wp-config.php"
-
-  fi
+  # Add MySQL root password to add to wp-config.php
+  sed -i "s/password_here/${MYSQLPASS}/g" "wp-config.php"
 
 fi
 
