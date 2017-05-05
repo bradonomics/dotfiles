@@ -19,3 +19,11 @@ alias flushdns='sudo /etc/init.d/dns-clean restart && /etc/init.d/networking for
 
 # Delete those stupid Mac .DS_Store files
 alias cleanup="find . -type f -name '.DS_Store' -ls -delete"
+
+# Get External IP
+alias ip='curl ipinfo.io/ip'
+
+# Get Local IPs
+alias ipl="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+
+alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test10.zip'
