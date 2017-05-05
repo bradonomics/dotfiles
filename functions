@@ -103,9 +103,11 @@ symlinkdotfiles() {
   cd ~/.dotfiles || exit
 
   # Grab all the files and loop through them adding a symlink
-  FILES="find . -maxdepth 1 -type f"
+  FILES="*"
   for FILE in $FILES; do
-    ln -sf ~/.dotfiles/$FILE ~/.$FILE;
+    if [ ! -d "$FILE" ]; then
+      ln -sfv ~/.dotfiles/$FILE ~/.$FILE;
+    fi
   done
 
   # Go back to the directory where we started
@@ -129,7 +131,7 @@ symlinkbin() {
   # Grab all the files and loop through them adding a symlink
   FILES="*"
   for FILE in $FILES; do
-    ln -sf ~/.dotfiles/bin/$FILE ~/bin/$FILE;
+    ln -sfv ~/.dotfiles/bin/$FILE ~/bin/$FILE;
   done
 
   # Move the the ~/bin directory and make all files executable
