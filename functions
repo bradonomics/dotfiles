@@ -51,10 +51,12 @@ stopapache() {
 # Usage: gulpinstall
 # Description: Prompts for project type, initializes node package manager, and installs gulp
 gulpinstall() {
-  # Create package.json file
-  npm init
+  # Create package.json file if one doesn't exist
+  if [ ! -f "package.json" ]; then
+    npm init
+  fi
 
-  # WordPress or Jekyll
+  # WordPress or Jekyll?
   read -r -p "Is this a WordPress or Jekyll project? [w/j] " RESPONSE
   RESPONSE=${RESPONSE,,}
 
@@ -66,6 +68,14 @@ gulpinstall() {
     echo "You must select 'w' for WordPress or 'j' for Jekyll."
     echo "Try again."
   fi
+}
+
+# Usage: gitkraken
+# Description: upgrad gitkraken ot the latest version
+gitkraken() {
+  sudo wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
+  sudo gdebi --non-interactive gitkraken-amd64.deb
+  rm -f gitkraken-amd64.deb
 }
 
 # Usage: calibre

@@ -8,7 +8,6 @@ Gemfile.lock
 
 ### Gulp ###
 .sass-cache
-package.json
 /node_modules/
 
 
