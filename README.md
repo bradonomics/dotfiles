@@ -1,10 +1,10 @@
-# Dotfiles (Linux Mint 17.3)
+# Dotfiles (Linux Mint ~~17.3~~ 18.1)
 
-This repo is a work in progress. I'm getting ready to move to Mint 18.1 (or 18.2 if it gets here by then) and wanted a back up of my dotfiles and scripts. I also thought since I've taken liberally from other's dotfiles I'd load mine here as a way of paying back the community.
+I've taken liberally from other people's dotfiles. Many functions herein were jacked from another repo and modified to fit my needs. I've uploaded them here as a way of paying back the community (and to keep them backed up, of course).
 
 ## /fonts
 
-Since most designers use MacOS and Linux doesn't come with Helvetica, I keep the Helvetica font family in my .fonts directory so I can see the internet as others do.
+I keep the Helvetica font family in my .fonts directory so I can see the internet as others do.
 
 Oxygen Mono ([available on Google Fonts](https://fonts.google.com/specimen/Oxygen+Mono)) is my preferred monospace system font. I use it in my terminal, code editor, and other places where l, 1, I, O, and 0 are difficult to tell apart.
 
