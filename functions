@@ -71,7 +71,7 @@ gulpinstall() {
 }
 
 # Usage: gitkraken
-# Description: upgrad gitkraken ot the latest version
+# Description: upgrade gitkraken to the latest version
 gitkraken() {
   sudo wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
   sudo gdebi --non-interactive gitkraken-amd64.deb
@@ -194,4 +194,30 @@ symlinkredshift() {
 
   # Go back to the directory where we started
   cd $DIR || exit
+}
+
+# Usage: gitinit <origin-url>
+# Description: `gitinit` without an option will init the current directory. `gitinit` with an origin URL option will init the current directory and push to the provided url.
+gitinit() {
+  echo "----------------------------------------"
+  echo "Initialising git repository..."
+  echo "----------------------------------------"
+  git init
+  git add .
+  git commit -m "Initial commit"
+
+  if [ -z "$1" ]; then
+    echo "----------------------------------------"
+    echo "Git repo initilisied."
+    echo "----------------------------------------"
+  else
+    echo "----------------------------------------"
+    echo "Pushing to remote repository..."
+    echo "----------------------------------------"
+    git remote add origin "$1"
+    git push -u origin master
+    echo "--------------------------------------------"
+    echo "Git repo initilisied and pushed to origin."
+    echo "--------------------------------------------"
+  fi
 }
