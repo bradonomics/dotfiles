@@ -28,7 +28,7 @@ prompt_dirty_unpulled_symbol="▼"
 prompt_unpushed_unpulled_symbol="⬡"
 prompt_dirty_unpushed_unpulled_symbol="⬢"
 
-function prompt_get_git_branch() {
+prompt_get_git_branch() {
   # On branches, this will return the branch name
   # On non-branches, (no branch)
   ref="$(git symbolic-ref HEAD 2> /dev/null | sed -e 's/refs\/heads\///')"
@@ -39,7 +39,7 @@ function prompt_get_git_branch() {
   fi
 }
 
-function prompt_get_git_progress() {
+prompt_get_git_progress() {
   # Detect in-progress actions (e.g. merge, rebase)
   # https://github.com/git/git/blob/v1.9-rc2/wt-status.c#L1199-L1241
   git_dir="$(git rev-parse --git-dir)"
@@ -72,7 +72,7 @@ function prompt_get_git_progress() {
   fi
 }
 
-prompt_is_branch1_behind_branch2 () {
+prompt_is_branch1_behind_branch2() {
   # Find the first log (if any) that is in branch1 but not branch2
   first_log="$(git log $1..$2 -1 2> /dev/null)"
 
@@ -80,12 +80,12 @@ prompt_is_branch1_behind_branch2 () {
   [[ -n "$first_log" ]]
 }
 
-prompt_branch_exists () {
+prompt_branch_exists() {
   # List remote branches           | # Find our branch and exit with 0 or 1 if found/not found
   git branch --remote 2> /dev/null | grep --quiet "$1"
 }
 
-prompt_parse_git_ahead () {
+prompt_parse_git_ahead() {
   # Grab the local and remote branch
   branch="$(prompt_get_git_branch)"
   remote="$(git config --get "branch.${branch}.remote" || echo -n "origin")"
@@ -100,7 +100,7 @@ prompt_parse_git_ahead () {
   fi
 }
 
-prompt_parse_git_behind () {
+prompt_parse_git_behind() {
   # Grab the branch
   branch="$(prompt_get_git_branch)"
   remote="$(git config --get "branch.${branch}.remote" || echo -n "origin")"
@@ -113,18 +113,18 @@ prompt_parse_git_behind () {
   fi
 }
 
-function prompt_parse_git_dirty() {
+prompt_parse_git_dirty() {
   # If the git status has *any* changes (e.g. dirty), echo our character
   if [[ -n "$(git status --porcelain 2> /dev/null)" ]]; then
     echo 1
   fi
 }
 
-function prompt_is_on_git() {
+prompt_is_on_git() {
   git rev-parse 2> /dev/null
 }
 
-function prompt_get_git_status() {
+prompt_get_git_status() {
   # Grab the git dirty and git behind
   dirty_branch="$(prompt_parse_git_dirty)"
   branch_ahead="$(prompt_parse_git_ahead)"
@@ -150,7 +150,7 @@ function prompt_get_git_status() {
   fi
 }
 
-prompt_get_git_info () {
+prompt_get_git_info() {
   # Grab the branch
   branch="$(prompt_get_git_branch) "
 
