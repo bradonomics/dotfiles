@@ -60,7 +60,7 @@ done
 
 echo "You should be in the project directory where you want to install WordPress, not in the /html directory."
 echo "If you are not in the project directory, abort this script, create the project directory, and start again."
-read -r -p "Are you in the poject directory? [y/N] " RESPONSE
+read -r -p "Are you in the project directory? [y/N] " RESPONSE
 
 RESPONSE=${RESPONSE,,}
 
