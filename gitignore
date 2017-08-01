@@ -6,6 +6,12 @@ _site
 Gemfile.lock
 
 
+### Travel Tripper ###
+media.json
+models.json
+sitemap.json
+
+
 ### Gulp ###
 .sass-cache
 /node_modules/
