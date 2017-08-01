@@ -1,31 +1,5 @@
 #!/bin/bash
 
-# Usage: extract <file>
-# Description: extracts archived files
-extract() {
-  if [[ -f $1 ]]; then
-    case $1 in
-      *.tar.bz2) tar -jxf $1  ;;
-      *.bz2)     bzip2 -dk $1 ;;
-			*.tar.gz)  tar -xzf $1  ;;
-      *.gz)      gzip -dk $1  ;;
-			*.tar.xz)  tar -Jxf $1  ;;
-      *.xz)      tar -Jxf $1  ;;
-			*.tar)     tar -xf $1   ;;
-			*.taz)     tar -xzf $1  ;;
-			*.tb2)     tar -jxf $1  ;;
-			*.tbz)     tar -jxf $1  ;;
-			*.tbz2)    tar -jxf $1  ;;
-			*.tgz)     tar -xzf $1  ;;
-			*.txz)     tar -Jxf $1  ;;
-			*.zip)     unzip $1     ;;
-      *)         echo "'$1' cannot be extracted/mounted via extract()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-
 # Usage: startapache
 # Description: starts apache webserver
 startapache() {
