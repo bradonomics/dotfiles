@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Usage: startapache
+# Usage: apachestart
 # Description: starts apache webserver
-startapache() {
+apachestart() {
   START="sudo service apache2 start"
   PGREP="/usr/bin/pgrep" # path to pgrep command
   HTTPD="apache2" # Httpd daemon name
@@ -12,14 +12,50 @@ startapache() {
   fi
 }
 
-# Usage: stopapache
+# Usage: apachestop
 # Description: stops apache webserver (different than start command above for reference)
-stopapache() {
+apachestop() {
   SERVICE="apache2"
   STOP="sudo service apache2 stop"
   if (( $(ps -ef | grep -v grep | grep $SERVICE | wc -l) > 0 )); then # if apache not running
     $STOP
   fi
+}
+
+# Usage: apacheenable
+# Description: adds apache to start at boot
+apacheenable() {
+  sudo update-rc.d apache2 defaults
+}
+
+# Usage: disableapache
+# Description: prevents apache from starting at boot
+apachedisable() {
+  sudo update-rc.d apache2 disable
+}
+
+# Usage: mysqlstart
+# Description: starts mysql service
+mysqlstart() {
+  sudo systemctl start mysql
+}
+
+# Usage: mysqlstop
+# Description: stops mysql service
+mysqlstop() {
+  sudo systemctl stop mysql
+}
+
+# Usage: mysqlenable
+# Description: adds mysql to start at boot
+mysqlenable() {
+  sudo systemctl enable mysql
+}
+
+# Usage: disablemysql
+# Description: prevents mysql from starting at boot
+mysqldisable() {
+  sudo systemctl disable mysql
 }
 
 # Usage: gulpinstall
