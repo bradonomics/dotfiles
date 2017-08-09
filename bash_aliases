@@ -6,6 +6,8 @@ alias clr='clear'
 alias ll='ls -alF'
 alias la='ls -A'
 
+alias tt="cd ~/Projects/travel-tripper"
+
 # APT shortcuts
 alias update='sudo apt update'
 alias install='sudo apt install'
