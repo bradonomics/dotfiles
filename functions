@@ -231,3 +231,17 @@ gitinit() {
     echo "--------------------------------------------"
   fi
 }
+
+# Usage: renamefiles
+# Description: Renames all files in current directory.
+renamefiles() {
+  read -r -p "What file extension are we looping? " FILE_EXT
+  read -r -p "What is the existing character or pattern you want to replace? " OLD
+  read -r -p "What is the new character or pattern you want? " NEW
+  FILES="*.$FILE_EXT"
+
+  for file in $FILES
+  do
+    mv "$file" "${file/${OLD}/${NEW}}"
+  done
+}
