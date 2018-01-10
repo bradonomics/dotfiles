@@ -10,6 +10,9 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 
+# Add local NPM directory to $PATH
+export PATH="$HOME/.npm/bin:$PATH"
+
 # WP CLI Auto Complete
 source ~/.wp-completion.bash
 
