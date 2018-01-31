@@ -85,11 +85,17 @@ git checkout gh-pages
 # Get directory (so we can copy files into it).
 DIRECTORY=${PWD}
 
-# Copy files from temp directory (overwriting existing)
+# Delete all files (except your .git directory) in the gh-pages branch. This ensures that only newly built files get added to the live site.
+rm -rf "${DIRECTORY:?}/"*
+
+# Copy files from temp directory
 cp -r $HOME/.tmp/jekyll/. $DIRECTORY
 
 # Add files to index, commit, and push to origin
 git add . && git commit -m "Deploy changes" --verbose
+
+# Push files to Github
+git push
 
 # Checkout master branch
 git checkout master
