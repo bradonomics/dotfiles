@@ -1,6 +1,6 @@
 #!/bin/bash
 # ---------------------------------------------------------------------------
-# Copyright 2017, Brad West
+# Copyright 2018, Brad West
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -72,7 +72,7 @@ apt_package_remove_list=(
   hexchat
   thunderbird
   transmission-gtk
-  laptop-mode-tools
+  # laptop-mode-tools
   cheese
   aisleriot
   gnome-mahjongg
@@ -82,14 +82,13 @@ apt_package_remove_list=(
 
 # Array of PPAs to add with a single add-apt-repository command
 ppa_install_list=(
-  ppa:git-core/ppa
-  ppa:deluge-team/ppa
-  ppa:linrunner/tlp
-  ppa:maarten-baert/simplescreenrecorder
-  ppa:pj-assis/ppa
-  ppa:webupd8team/atom
-  ppa:webupd8team/unstable
-  ppa:numix/ppa
+  # ppa:git-core/ppa
+  # ppa:deluge-team/ppa
+  # ppa:maarten-baert/simplescreenrecorder
+  # ppa:pj-assis/ppa
+  # ppa:webupd8team/atom
+  # ppa:webupd8team/unstable
+  # ppa:numix/ppa
   ppa:embrosyn/cinnamon
 )
 
@@ -98,20 +97,19 @@ apt_package_install_list=(
   gdebi
   curl
   cinnamon
-  atom
+  # atom
   git
-  git-core
-  deluge
-  tlp # TLP (Power Settings)
-  tlp-rdw
+  # deluge
+  # tlp # TLP (Power Settings)
+  # tlp-rdw
   guake
-  pyroom
-  guvcview
-  simplescreenrecorder
-  numix-icon-theme
-  numix-icon-theme-square
-  skype
-  evolution
+  # pyroom
+  # guvcview
+  # simplescreenrecorder
+  # numix-icon-theme
+  # numix-icon-theme-square
+  # skype
+  # evolution
 )
 
 package_remove() {
@@ -149,12 +147,12 @@ package_install() {
   rm -f google-chrome-stable_current_amd64.deb
 
   # Install Skype for Linux
-  wget https://repo.skype.com/latest/skypeforlinux-64.deb
-  gdebi --non-interactive skypeforlinux-64.deb
-  rm -f skypeforlinux-64.deb
+  # wget https://repo.skype.com/latest/skypeforlinux-64.deb
+  # gdebi --non-interactive skypeforlinux-64.deb
+  # rm -f skypeforlinux-64.deb
 
   # Install Calibre
-  wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+  # wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 
   # Install GitKraken
   wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
@@ -162,19 +160,19 @@ package_install() {
   rm -f gitkraken-amd64.deb
 
   # Install Mint-Y Theme Files
-  wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.1.5_all.deb
-  gdebi --non-interactive mint-y-theme_1.1.5_all.deb
-  rm -f mint-y-theme_1.1.5_all.deb
+  # wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.1.5_all.deb
+  # gdebi --non-interactive mint-y-theme_1.1.5_all.deb
+  # rm -f mint-y-theme_1.1.5_all.deb
 
   # Install WP CLI
-  wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-  chmod +x wp-cli.phar
-  mv wp-cli.phar /usr/local/bin/wp
-  wget https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
-  mv -f wp-completion.bash $HOME/.wp-completion.bash
+  # wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  # chmod +x wp-cli.phar
+  # mv wp-cli.phar /usr/local/bin/wp
+  # wget https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
+  # mv -f wp-completion.bash $HOME/.wp-completion.bash
 
   # Install Node
-  curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
   apt install -y nodejs build-essential
 
   # Run Upgrader
@@ -192,21 +190,6 @@ ppa_install
 
 # Install new software
 package_install
-
-# Install Atom Sync Settings package
-apm install sync-settings
-
-# Change ownership of .atom directory
-chown $USER:$USER $HOME/.atom
-
-# exit
-graceful_exit
-
-
-# Change system settings
-# Set Number of Workspaces to 2:
-# gsettings set org.cinnamon.desktop.wm.preferences num-workspaces 2
-
 
 # Install Apache
 # apt install -y apache2
@@ -229,18 +212,24 @@ graceful_exit
 
 
 # Install Ruby
-# apt install zlib1g-dev libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
-#
-# git clone https://github.com/rbenv/rbenv.git $HOME/.rbenv
-# git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build
-#
-# rbenv install 2.4.0
-# rbenv global 2.4.0
-# gem install bundler
 
-# Install Jekyll
-# gem install jekyll
+# Clone rbenv into ~/.rbenv and add ~/.rbenv/bin to your $PATH for access to the rbenv command-line utility.
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+exec $SHELL
 
+# Clone ruby-build into ~/.rbenv/plugins/ruby-build and add ~/.rbenv/plugins/ruby-build/bin to your $PATH for access via the command-line utility.
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+exec $SHELL
+
+# Install the latest version of Ruby and set it globally.
+rbenv install 2.5.0
+rbenv global 2.5.0
+
+# Install Bundler
+gem install bundler
 
 # Install Redshift
 # apt install libxcb1-dev libxcb-randr0-dev libx11-dev intltool
