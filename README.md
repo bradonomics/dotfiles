@@ -1,6 +1,4 @@
-# Dotfiles (Linux Mint ~~17.3~~ 18.1)
-
-I've taken liberally from other people's dotfiles. Many functions herein were jacked from another repo and modified to fit my needs. I've uploaded them here as a way of paying back the community (and to keep them backed up, of course).
+I've taken liberally from other people's dotfiles. Many functions herein were jacked from other repos and modified to fit my needs. I've uploaded them here as a way of paying back the community (and to keep them backed up, of course).
 
 ## /fonts
 
@@ -12,13 +10,9 @@ Oxygen Mono ([available on Google Fonts](https://fonts.google.com/specimen/Oxyge
 
 This houses my redshift.conf file. Read more about [Redshift here](http://jonls.dk/redshift/).
 
-## /gnome2/accels
-
-This houses my nemo settings, for the moment only for this line: `(gtk_accel_path "<Actions>/DirViewActions/New Empty Document" "<Primary><Shift>f")` which adds the keyboard shortcut for creating a new text document.
-
 ## /bin directory
 
-Not really dotfiles, but similar enough I didn't want to create another repo.
+Not really dotfiles, but similar enough.
 
 ### install-wordpress.sh
 
@@ -26,7 +20,7 @@ This script installs WordPress. Although if I need to tell you that, you are pro
 
 ### install-genesis.sh & install-jekyll.sh
 
-These are basically the same. They download theme files, make a few arrangements, and install Gulp.
+These are basically the same. They download theme files, make a few arrangements, and installs Gulp.
 
 ### install-wordpress-genesis.sh
 
@@ -34,7 +28,9 @@ This installs WordPress just like install-wordpress.sh but then adds [Genesis Bo
 
 ### webniyom-build-demos.sh
 
-This is a build utility for Jekyll sites. To build [WebNiyom](https://webniyom.com/en/) demos this script updates the master branch site.url in _config.yml. It then builds the site in a different directory and pushes those changes to the demo server, then dumps the changes to the config file.
+This was a build utility for Jekyll sites. It updated the master branch site.url in `_config.yml`. It then built the site in a different directory and pushed those changes to the demo server, then dumped the changes to the config file.
+
+I no longer use this but keep it here for reference.
 
 ### linux-install.sh
 
