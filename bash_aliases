@@ -2,7 +2,6 @@
 
 alias rebash='source ~/.bashrc'
 
-alias clr='clear'
 alias ll='ls -alF'
 alias la='ls -A'
 
@@ -33,4 +32,4 @@ alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/download
 
 # Jekyll build and serve commands when using Bundler
 alias build='bundle exec jekyll build'
-alias serve='bundle exec jekyll serve'
+alias serve='parallelshell "bundle exec jekyll build --watch" "browser-sync start --server '_site' --files '_site'"'
