@@ -6,15 +6,21 @@ if [ -d "$HOME/bin" ]; then
 fi
 
 # Add Ruby directories to $PATH
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+if [ -d "$HOME/.rbenv" ]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+  export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+fi
 
 # Add local NPM directory to $PATH
-export PATH="$HOME/.npm/bin:$PATH"
+if [ -d "$HOME/.npm" ]; then
+  export PATH="$HOME/.npm/bin:$PATH"
+fi
 
 # WP CLI Auto Complete
-source ~/.wp-completion.bash
+if [ -f "$HOME/.wp-completion.bash" ]; then
+  source ~/.wp-completion.bash
+fi
 
 # Alias definitions
 if [ -f ~/.bash_aliases ]; then
