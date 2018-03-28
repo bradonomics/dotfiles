@@ -213,16 +213,11 @@ package_install
 
 # Install Ruby
 
-# Clone rbenv into ~/.rbenv and add ~/.rbenv/bin to your $PATH for access to the rbenv command-line utility.
+# Clone rbenv into ~/.rbenv
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-exec $SHELL
 
-# Clone ruby-build into ~/.rbenv/plugins/ruby-build and add ~/.rbenv/plugins/ruby-build/bin to your $PATH for access via the command-line utility.
+# Clone ruby-build into ~/.rbenv/plugins/ruby-build
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
-exec $SHELL
 
 # Install the latest version of Ruby and set it globally.
 rbenv install 2.5.0
