@@ -110,6 +110,9 @@ apt_package_install_list=(
   # numix-icon-theme-square
   # skype
   # evolution
+  libssl-dev
+  libreadline-dev
+  zlib1g-dev
 )
 
 package_remove() {
@@ -218,6 +221,9 @@ sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/rbenv.git ~/
 
 # Clone ruby-build into ~/.rbenv/plugins/ruby-build
 sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
+
+# Update path after cloning rbenv
+sudo -H -u ${SUDO_USER} bash -c 'source ~/.bashrc'
 
 # Install the latest version of Ruby and set it globally.
 sudo -H -u ${SUDO_USER} bash -c 'rbenv install 2.5.0'
