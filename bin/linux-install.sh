@@ -86,7 +86,7 @@ ppa_install_list=(
   # ppa:deluge-team/ppa
   # ppa:maarten-baert/simplescreenrecorder
   # ppa:pj-assis/ppa
-  # ppa:webupd8team/atom
+  ppa:webupd8team/atom
   # ppa:webupd8team/unstable
   # ppa:numix/ppa
   ppa:embrosyn/cinnamon
@@ -97,7 +97,7 @@ apt_package_install_list=(
   gdebi
   curl
   cinnamon
-  # atom
+  atom
   git
   # deluge
   # tlp # TLP (Power Settings)
@@ -214,17 +214,17 @@ package_install
 # Install Ruby
 
 # Clone rbenv into ~/.rbenv
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv'
 
 # Clone ruby-build into ~/.rbenv/plugins/ruby-build
-git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
 
 # Install the latest version of Ruby and set it globally.
-rbenv install 2.5.0
-rbenv global 2.5.0
+sudo -H -u ${SUDO_USER} bash -c 'rbenv install 2.5.0'
+sudo -H -u ${SUDO_USER} bash -c 'rbenv global 2.5.0'
 
 # Install Bundler
-gem install bundler
+sudo -H -u ${SUDO_USER} bash -c 'gem install bundler'
 
 # Install Redshift
 # apt install libxcb1-dev libxcb-randr0-dev libx11-dev intltool
@@ -244,5 +244,4 @@ gem install bundler
 # configure: error: in `/home/brad/redshift-1.11':
 # configure: error: C compiler cannot create executables
 # See `config.log' for more details
-
 
