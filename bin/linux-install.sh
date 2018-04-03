@@ -99,6 +99,7 @@ apt_package_install_list=(
   cinnamon
   atom
   git
+  snapd
   # deluge
   # tlp # TLP (Power Settings)
   # tlp-rdw
@@ -158,9 +159,10 @@ package_install() {
   # wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 
   # Install GitKraken
-  wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
-  gdebi --non-interactive gitkraken-amd64.deb
-  rm -f gitkraken-amd64.deb
+  # wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
+  # gdebi --non-interactive gitkraken-amd64.deb
+  # rm -f gitkraken-amd64.deb
+  snap install gitkraken
 
   # Install Mint-Y Theme Files
   # wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.1.5_all.deb
@@ -219,10 +221,13 @@ package_install
 # Clone rbenv into ~/.rbenv
 sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv'
 
+# Update path after cloning rbenv
+sudo -H -u ${SUDO_USER} bash -c 'source ~/.bashrc'
+
 # Clone ruby-build into ~/.rbenv/plugins/ruby-build
 sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
 
-# Update path after cloning rbenv
+# Update path after cloning ruby-build
 sudo -H -u ${SUDO_USER} bash -c 'source ~/.bashrc'
 
 # Install the latest version of Ruby and set it globally.
