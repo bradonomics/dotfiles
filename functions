@@ -1,5 +1,34 @@
 #!/bin/bash
 
+ttweb() {
+  # Clear the index
+  git reset --quiet
+
+  # Delete files from the index one-by-one
+  if [[ -n $(git status --short Gemfile.lock) ]]; then
+    git rm --force Gemfile.lock
+  fi
+
+  if [[ -n $(git status --short media.json) ]]; then
+    git rm --force media.json
+  fi
+
+  if [[ -n $(git status --short models.json) ]]; then
+    git rm --force models.json
+  fi
+
+  if [[ -n $(git status --short old_media.json) ]]; then
+    git rm --force old_media.json
+  fi
+
+  if [[ -n $(git status --short sitemap.json) ]]; then
+    git rm --force sitemap.json
+  fi
+
+  # Commit the removed files
+  git commit --message "Remove gitignored files from repo"
+}
+
 # Usage: apachestart
 # Description: starts apache webserver
 apachestart() {
@@ -56,28 +85,6 @@ mysqlenable() {
 # Description: prevents mysql from starting at boot
 mysqldisable() {
   sudo systemctl disable mysql
-}
-
-# Usage: gulpinstall
-# Description: Prompts for project type, initializes node package manager, and installs gulp
-gulpinstall() {
-  # Create package.json file if one doesn't exist
-  if [ ! -f "package.json" ]; then
-    npm init
-  fi
-
-  # WordPress or Jekyll?
-  read -r -p "Is this a WordPress or Jekyll project? [w/j] " RESPONSE
-  RESPONSE=${RESPONSE,,}
-
-  if [[ $RESPONSE == w ]]; then
-    npm install --save-dev gulp gulp-sass gulp-autoprefixer gulp-cssnano gulp-concat gulp-uglify gulp-rename browser-sync
-  elif [[ $RESPONSE == j ]]; then
-    npm install --save-dev gulp gulp-shell gulp-concat gulp-uglify gulp-rename browser-sync
-  else
-    echo "You must select 'w' for WordPress or 'j' for Jekyll."
-    echo "Try again."
-  fi
 }
 
 # Usage: gitkraken
@@ -216,42 +223,15 @@ symlinkredshift() {
   cd $DIR || exit
 }
 
-# Usage: gitinit <origin-url>
-# Description: `gitinit` without an option will init the current directory. `gitinit` with an origin URL option will init the current directory and push to the provided url.
-gitinit() {
-  echo "----------------------------------------"
-  echo "Initialising git repository..."
-  echo "----------------------------------------"
-  git init
-  git add .
-  git commit -m "Initial commit"
-
-  if [ -z "$1" ]; then
-    echo "----------------------------------------"
-    echo "Git repo initilisied."
-    echo "----------------------------------------"
-  else
-    echo "----------------------------------------"
-    echo "Pushing to remote repository..."
-    echo "----------------------------------------"
-    git remote add origin "$1"
-    git push -u origin master
-    echo "--------------------------------------------"
-    echo "Git repo initilisied and pushed to origin."
-    echo "--------------------------------------------"
-  fi
-}
-
 # Usage: renamefiles
 # Description: Renames all files in current directory.
 renamefiles() {
-  read -r -p "What file extension are we looping? " FILE_EXT
+  read -r -p "What file extension are we looping? (no dot) " FILE_EXT
   read -r -p "What is the existing character or pattern you want to replace? " OLD
   read -r -p "What is the new character or pattern you want? " NEW
   FILES="*.$FILE_EXT"
 
-  for file in $FILES
-  do
+  for file in $FILES; do
     mv "$file" "${file/${OLD}/${NEW}}"
   done
 }
