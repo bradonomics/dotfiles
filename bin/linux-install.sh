@@ -165,9 +165,9 @@ package_install() {
   snap install gitkraken
 
   # Install Mint-Y Theme Files
-  # wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.1.5_all.deb
-  # gdebi --non-interactive mint-y-theme_1.1.5_all.deb
-  # rm -f mint-y-theme_1.1.5_all.deb
+  # wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.2.3_all.deb
+  # gdebi --non-interactive mint-y-theme_1.2.3_all.deb
+  # rm -f mint-y-theme_1.2.3_all.deb
 
   # Install WP CLI
   # wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
