@@ -30,22 +30,22 @@ fi
 
 # WP CLI Auto Complete
 if [ -f "$HOME/.wp-completion.bash" ]; then
-  source ~/.wp-completion.bash
+  . "$HOME/.wp-completion.bash"
 fi
 
 # Alias definitions
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
+if [ -f "$HOME/.bash_aliases" ]; then
+  . "$HOME/.bash_aliases"
 fi
 
 # Functions
-if [ -f ~/.functions ]; then
-  . ~/.functions
+if [ -f "$HOME/.functions" ]; then
+  . "$HOME/.functions"
 fi
 
 # Run bash-prompt with git
-if [ -f ~/.bash_prompt ]; then
-  . ~/.bash_prompt
+if [ -f "$HOME/.bash_prompt" ]; then
+  . "$HOME/.bash_prompt"
 fi
 
 # Enable programmable completion features (you don't need to enable
