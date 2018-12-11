@@ -97,7 +97,7 @@ if command -v wp >/dev/null; then
   wp core config --dbname=$DATABASENAME --dbuser=root --dbpass=$MYSQLPASS
 
   # Do the WordPress Install
-  wp core install --url="http://local.dev/$DATABASENAME" --title="$DATABASENAME" --admin_user="brad" --admin_password="brad" --admin_email="not@relevent.com"
+  wp core install --url="http://localhost/$DATABASENAME" --title="$DATABASENAME" --admin_user="brad" --admin_password="brad" --admin_email="not@relevent.com"
 
 else # If WP CLI isn't istalled do it manually
 
