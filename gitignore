@@ -12,7 +12,7 @@ models.json
 sitemap.json
 
 
-### Gulp ###
+### NPM ###
 .sass-cache
 /node_modules/
 

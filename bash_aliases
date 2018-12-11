@@ -7,6 +7,7 @@ alias la='ls -A'
 
 alias dot="cd ~/.dotfiles"
 alias tt="cd ~/Projects/travel-tripper"
+alias ttcom="cd /var/www/html/traveltripper/wp-content/themes/traveltripper"
 
 # Git shortcuts
 alias stash="git stash --include-untracked"
@@ -17,8 +18,14 @@ alias update='sudo apt update'
 alias install='sudo apt install'
 alias remove='sudo apt remove'
 
+# Services
+alias start-mongo='sudo service mongod start'
+
 # Make echo $PATH readable
 alias path='echo $PATH | tr ":" "\n"'
+
+# ipconfig-ish equivalent
+alias ipconfig='nmcli device show eno1 | grep IP4'
 
 # A ipconfig /flushdns equivalent
 alias flushdns='sudo /etc/init.d/dns-clean restart && /etc/init.d/networking force-reload'
