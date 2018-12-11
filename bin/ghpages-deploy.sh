@@ -65,9 +65,10 @@ if [[ $(git rev-parse --abbrev-ref HEAD) != "master" ]]; then
   error_exit "You should be on the master branch."
 fi
 
-# Check for file changes and abort if found.
+# Check for uncommited changes and stash if found.
 if [[ -n $(git status -s) ]]; then
-  error_exit "Commit all your changes before continuing."
+  git stash --include-untracked
+  STASH='yes'
 fi
 
 # Remove temp directory from previous build.
@@ -99,5 +100,12 @@ git push
 
 # Checkout master branch
 git checkout master
+
+# Unstash
+if [[ $(git rev-parse --abbrev-ref HEAD) != "master" ]]; then
+  if [ $STASH == 'yes' ]; then
+    git stash pop
+  fi
+fi
 
 graceful_exit
