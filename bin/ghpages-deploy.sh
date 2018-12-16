@@ -102,7 +102,7 @@ git push
 git checkout master
 
 # Unstash
-if [[ $(git rev-parse --abbrev-ref HEAD) != "master" ]]; then
+if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then
   if [ $STASH == 'yes' ]; then
     git stash pop
   fi
