@@ -15,20 +15,20 @@
 
 PROGNAME=${0##*/}
 
-clean_up() { # Perform pre-exit housekeeping
-  return
-}
+# clean_up() { # Perform pre-exit housekeeping
+#   return
+# }
 
 error_exit() {
   echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
-  clean_up
+  # clean_up
   exit 1
 }
 
-graceful_exit() {
-  clean_up
-  exit
-}
+# graceful_exit() {
+#   clean_up
+#   exit
+# }
 
 signal_exit() { # Handle trapped signals
   case $1 in
@@ -36,7 +36,7 @@ signal_exit() { # Handle trapped signals
       error_exit "Program interrupted by user" ;;
     TERM)
       echo -e "\n$PROGNAME: Program terminated" >&2
-      graceful_exit ;;
+      exit ;;
     *)
       error_exit "$PROGNAME: Terminating on unknown signal" ;;
   esac
@@ -45,18 +45,6 @@ signal_exit() { # Handle trapped signals
 # Trap signals
 trap "signal_exit TERM" TERM HUP
 trap "signal_exit INT"  INT
-
-# Parse command-line
-while [[ -n $1 ]]; do
-  case $1 in
-    -* | --*)
-      usage
-      error_exit "Unknown option $1" ;;
-    *)
-      echo "Argument $1 to process..." ;;
-  esac
-  shift
-done
 
 # Optional branch check with sed: $(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
@@ -86,16 +74,17 @@ git checkout gh-pages
 # Get directory (so we can copy files into it).
 DIRECTORY=${PWD}
 
-# Delete all files (except your .git directory) in the gh-pages branch. This ensures that only newly built files get added to the live site.
+# Delete all files in the gh-pages branch (except dot files)
+# This ensures that only newly built files get added to the live site.
 rm -rf "${DIRECTORY:?}/"*
 
 # Copy files from temp directory
 cp -r $HOME/.tmp/jekyll/. $DIRECTORY
 
-# Add files to index, commit, and push to origin
+# Add files to index and commit
 git add . && git commit -m "Deploy changes" --verbose
 
-# Push files to Github
+# Push files to origin
 git push
 
 # Checkout master branch
@@ -108,4 +97,4 @@ if [[ $(git rev-parse --abbrev-ref HEAD) == "master" ]]; then
   fi
 fi
 
-graceful_exit
+exit

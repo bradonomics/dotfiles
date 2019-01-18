@@ -62,7 +62,8 @@ calibre() {
   wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 }
 
-# `a` with no arguments opens the current directory in Atom Editor, otherwise opens the given location
+# `a` with no arguments opens the current directory in Atom Editor
+# otherwise opens the given location
 function a() {
 	if [ $# -eq 0 ]; then
 		atom .;
@@ -71,7 +72,8 @@ function a() {
 	fi;
 }
 
-# `c` with no arguments opens the current directory in Visual Studio Code, otherwise opens the given location
+# `c` with no arguments opens the current directory in Visual Studio Code
+# otherwise opens the given location
 function c() {
 	if [ $# -eq 0 ]; then
 		code .;
@@ -88,7 +90,8 @@ symlinkallthethings() {
   symlinkredshift
 }
 
-# Creates a symbolic link of files in ~/.dotfiles to ~/ (and refreshes existing links with -f).
+# Creates a symbolic link of files in ~/.dotfiles to ~/
+# (and refreshes existing links with -f)
 symlinkdotfiles() {
   # Grab our current directory so we can get back there after the magic happes.
   DIR=${PWD}
@@ -108,7 +111,8 @@ symlinkdotfiles() {
   cd $DIR || exit
 }
 
-# Creates a symbolic link of files in ~/.dotfiles/bin to ~/bin (and refreshes existing links with -f).
+# Creates a symbolic link of files in ~/.dotfiles/bin to ~/bin
+# (and refreshes existing links with -f)
 symlinkbin() {
   # Grab our current directory so we can get back there after the magic happes.
   DIR=${PWD}
@@ -138,7 +142,8 @@ symlinkbin() {
   cd $DIR || exit
 }
 
-# Creates a symbolic link of files in ~/.dotfiles/fonts to ~/.fonts (and refreshes existing links with -f).
+# Creates a symbolic link of files in ~/.dotfiles/fonts to ~/.fonts
+# (and refreshes existing links with -f)
 symlinkfonts() {
   # Grab our current directory so we can get back there after the magic happes.
   DIR=${PWD}
@@ -159,7 +164,8 @@ symlinkfonts() {
   cd $DIR || exit
 }
 
-# Creates a symbolic link of ~/.dotfiles/config to ~/.config (and refreshes existing links with -f).
+# Creates a symbolic link of ~/.dotfiles/config to ~/.config
+# (and refreshes existing links with -f)
 symlinkredshift() {
   # Grab our current directory so we can get back there after the magic happes.
   DIR=${PWD}
@@ -177,7 +183,7 @@ symlinkredshift() {
   cd $DIR || exit
 }
 
-# Renames all files in current directory.
+# Renames all files in current directory
 renamefiles() {
   read -r -p "What file extension are we looping? (no dot) " FILE_EXT
   read -r -p "What is the existing character or pattern you want to replace? " OLD
@@ -186,6 +192,17 @@ renamefiles() {
 
   for file in $FILES; do
     mv "$file" "${file/${OLD}/${NEW}}"
+  done
+}
+
+# Remove empty directories in current directory
+removeempties() {
+  for directory in "${PWD}"/*; do
+    if [[ $(ls -A "$directory") ]]; then
+      true
+    else
+      rm -rf "$directory"
+    fi
   done
 }
 
