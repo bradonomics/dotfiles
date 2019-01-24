@@ -13,55 +13,30 @@
 # more details.
 # ---------------------------------------------------------------------------
 
-PROGNAME=${0##*/}
-
-clean_up() { # Perform pre-exit housekeeping
-  return
-}
-
 error_exit() {
-  echo -e "${PROGNAME}: ${1:-"Unknown Error"}" >&2
-  clean_up
+  echo -e "\n\n${1:-"Unknown Error"}\n\n" >&2
   exit 1
 }
-
-graceful_exit() {
-  clean_up
-  exit
-}
-
-signal_exit() { # Handle trapped signals
-  case $1 in
-    INT)
-      error_exit "Program interrupted by user" ;;
-    TERM)
-      echo -e "\n$PROGNAME: Program terminated" >&2
-      graceful_exit ;;
-    *)
-      error_exit "$PROGNAME: Terminating on unknown signal" ;;
-  esac
-}
-
-# Trap signals
-trap "signal_exit TERM" TERM HUP
-trap "signal_exit INT"  INT
 
 # Check for root UID
 if [[ $(id -u) != 0 ]]; then
   error_exit "You must use 'sudo' to run this script."
 fi
 
-# Parse command-line
-while [[ -n $1 ]]; do
-  case $1 in
-    -* | --*)
-      usage
-      error_exit "Unknown option $1" ;;
-    *)
-      echo "Argument $1 to process..." ;;
-  esac
-  shift
-done
+# Check for dotfiles
+read -r -p "Have you added your dotfiles? [y/N]" DOTFILES_RESPONSE
+DOTFILES_RESPONSE=${DOTFILES_RESPONSE,,}
+if [[ $DOTFILES_RESPONSE =~ ^(no|n| ) ]] | [ -z $DOTFILES_RESPONSE ]; then
+  error_exit "You must install your dotfiles first or the Ruby install will fail."
+fi
+
+# Check for SSH keys and add if available
+read -r -p "Do you have your private SSH keys on this machine? [Y/n]" KEYS_RESPONSE
+KEYS_RESPONSE=${KEYS_RESPONSE,,}
+if [[ $KEYS_RESPONSE =~ ^(yes|y| ) ]] | [ -z $KEYS_RESPONSE ]; then
+  read -r -p "Where are your SSH keys? (ex: /home/brad/.ssh/id_rsa): " KEYS_LOCATION
+  sudo -H -u ${SUDO_USER} bash -c "ssh-add $KEYS_LOCATION"
+fi
 
 # Array of packages to remove with a single apt remove command
 apt_package_remove_list=(
@@ -72,7 +47,6 @@ apt_package_remove_list=(
   hexchat
   thunderbird
   transmission-gtk
-  # laptop-mode-tools
   cheese
   aisleriot
   gnome-mahjongg
@@ -82,13 +56,11 @@ apt_package_remove_list=(
 
 # Array of PPAs to add with a single add-apt-repository command
 ppa_install_list=(
-  # ppa:git-core/ppa
-  # ppa:deluge-team/ppa
-  # ppa:maarten-baert/simplescreenrecorder
-  # ppa:pj-assis/ppa
-  ppa:webupd8team/atom
-  # ppa:webupd8team/unstable
+  ppa:deluge-team/ppa
+  ppa:maarten-baert/simplescreenrecorder
   # ppa:numix/ppa
+  ppa:oranchelo/oranchelo-icon-theme
+  ppa:system76/pop
   ppa:embrosyn/cinnamon
 )
 
@@ -99,18 +71,14 @@ apt_package_install_list=(
   cinnamon
   atom
   git
-  snapd
-  # deluge
-  # tlp # TLP (Power Settings)
-  # tlp-rdw
+  deluge
   guake
-  # pyroom
-  # guvcview
-  # simplescreenrecorder
+  simplescreenrecorder
   # numix-icon-theme
-  # numix-icon-theme-square
-  # skype
-  # evolution
+  oranchelo-icon-theme
+  pop-theme
+  skype
+  redshift
   libssl-dev
   libreadline-dev
   zlib1g-dev
@@ -134,6 +102,10 @@ ppa_install() {
 
   # Add Canonical Partner Repos
   add-apt-repository -y "deb http://archive.canonical.com/ubuntu $(lsb_release -sc) partner"
+
+  # Add Atom Code Editor
+  wget -qO - https://packagecloud.io/AtomEditor/atom/gpgkey | apt-key add -
+  sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
 }
 
 package_install() {
@@ -150,34 +122,28 @@ package_install() {
   gdebi --non-interactive google-chrome-stable_current_amd64.deb
   rm -f google-chrome-stable_current_amd64.deb
 
-  # Install Skype for Linux
-  # wget https://repo.skype.com/latest/skypeforlinux-64.deb
-  # gdebi --non-interactive skypeforlinux-64.deb
-  # rm -f skypeforlinux-64.deb
-
   # Install Calibre
-  # wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+  wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 
   # Install GitKraken
-  # wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
-  # gdebi --non-interactive gitkraken-amd64.deb
-  # rm -f gitkraken-amd64.deb
-  snap install gitkraken
+  wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
+  gdebi --non-interactive gitkraken-amd64.deb
+  rm -f gitkraken-amd64.deb
 
   # Install Mint-Y Theme Files
-  # wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.2.3_all.deb
-  # gdebi --non-interactive mint-y-theme_1.2.3_all.deb
-  # rm -f mint-y-theme_1.2.3_all.deb
+  wget http://packages.linuxmint.com/pool/main/m/mint-y-theme/mint-y-theme_1.2.3_all.deb
+  gdebi --non-interactive mint-y-theme_1.2.3_all.deb
+  rm -f mint-y-theme_1.2.3_all.deb
 
   # Install WP CLI
-  # wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-  # chmod +x wp-cli.phar
-  # mv wp-cli.phar /usr/local/bin/wp
-  # wget https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
-  # mv -f wp-completion.bash $HOME/.wp-completion.bash
+  wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+  chmod +x wp-cli.phar
+  mv wp-cli.phar /usr/local/bin/wp
+  wget https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
+  mv -f wp-completion.bash $HOME/.wp-completion.bash
 
   # Install Node
-  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
   apt install -y nodejs build-essential
 
   # Run Upgrader
@@ -195,6 +161,9 @@ ppa_install
 
 # Install new software
 package_install
+
+
+## Install LAMP
 
 # Install Apache
 # apt install -y apache2
@@ -219,40 +188,36 @@ package_install
 # Install Ruby
 
 # Clone rbenv into ~/.rbenv
-sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv'
+sudo -H -u ${SUDO_USER} bash -c "git clone https://github.com/rbenv/rbenv.git $HOME/.rbenv"
 
 # Update path after cloning rbenv
-sudo -H -u ${SUDO_USER} bash -c 'source ~/.bashrc'
+sudo -H -u ${SUDO_USER} bash -c "source $HOME/.bashrc"
 
 # Clone ruby-build into ~/.rbenv/plugins/ruby-build
-sudo -H -u ${SUDO_USER} bash -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
+sudo -H -u ${SUDO_USER} bash -c "git clone https://github.com/rbenv/ruby-build.git $HOME/.rbenv/plugins/ruby-build"
 
 # Update path after cloning ruby-build
-sudo -H -u ${SUDO_USER} bash -c 'source ~/.bashrc'
+sudo -H -u ${SUDO_USER} bash -c "source $HOME/.bashrc"
 
 # Install the latest version of Ruby and set it globally.
-sudo -H -u ${SUDO_USER} bash -c 'rbenv install 2.5.0'
-sudo -H -u ${SUDO_USER} bash -c 'rbenv global 2.5.0'
+sudo -H -u ${SUDO_USER} bash -c "rbenv install 2.5.3"
+sudo -H -u ${SUDO_USER} bash -c "rbenv global 2.5.3"
 
 # Install Bundler
-sudo -H -u ${SUDO_USER} bash -c 'gem install bundler'
+sudo -H -u ${SUDO_USER} bash -c "gem install bundler"
 
-# Install Redshift
-# apt install libxcb1-dev libxcb-randr0-dev libx11-dev intltool
-# wget https://github.com/jonls/redshift/releases/download/v1.11/redshift-1.11.tar.xz
-# tar xf redshift-1.11.tar.xz
-# cd redshift-1.11 || error_exit
-# ./configure --enable-randr --enable-gui --enable-ubuntu \
-#     --with-systemduserunitdir=$HOME/.config/systemd/user
-# make
-# make install
-# cd $HOME || error_exit
-# rm -rf redshift-1.11
-# rm -f redshift-1.11.tar.xz
 
-# Unable to get this to work. Getting error:
-# checking whether the C compiler works... no
-# configure: error: in `/home/brad/redshift-1.11':
-# configure: error: C compiler cannot create executables
-# See `config.log' for more details
+## Install NPM
 
+# Make ~/.npm directory for global packages
+if [ ! -d "$HOME/.npm" ]; then
+  sudo -H -u ${SUDO_USER} bash -c "mkdir $HOME/.npm"
+fi
+
+# Set npm config to new ~/.npm directory
+sudo -H -u ${SUDO_USER} bash -c "npm config set prefix '$HOME/.npm'"
+
+# Install parallelshell and browser-sync NPM packages globally
+sudo -H -u ${SUDO_USER} bash -c "npm install --global parallelshell browser-sync"
+
+exit
