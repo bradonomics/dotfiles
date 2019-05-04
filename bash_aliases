@@ -6,8 +6,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 
 alias dot="cd ~/.dotfiles"
-alias tt="cd ~/Projects/travel-tripper"
-alias ttcom="cd /var/www/html/traveltripper/wp-content/themes/traveltripper"
+alias brad="cd ~/Projects/bradonomics.com"
 
 # Git shortcuts
 alias stash="git stash --include-untracked"
@@ -43,9 +42,9 @@ alias iplocal="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test10.zip'
 
 # Jekyll build and serve commands when using Bundler
-alias build='bundle exec jekyll build'
-alias serve='parallelshell "bundle exec jekyll build --watch" "browser-sync start --server '_site' --files '_site'"'
+alias build-bundle='bundle exec jekyll build'
+alias serve-bundle='parallelshell "bundle exec jekyll build --watch" "browser-sync start --server '_site' --files '_site'"'
 
-# Jekyll build and serve commands for sites with {{ site.url }} in file paths
-alias build-latest='jekyll build --config _config.yml,_config-dev.yml'
-alias serve-latest='parallelshell "jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
+# Jekyll build and serve commands using dev config and without Bundler
+alias build='jekyll build --config _config.yml,_config-dev.yml'
+alias serve='parallelshell "jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
