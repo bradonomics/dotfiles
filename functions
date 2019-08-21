@@ -215,3 +215,9 @@ npm() {
     command npm "$@";
   fi
 }
+
+# Update rbenv & avaliable Ruby versions
+rbenv-update() {
+  git -C ~/.rbenv/ pull --verbose
+  git -C ~/.rbenv/plugins/ruby-build/ pull --verbose
+}
