@@ -3,6 +3,7 @@ cloudcannon*
 ### Jekyll ###
 _site
 .jekyll-metadata
+.jekyll-cache
 Gemfile.lock
 
 
