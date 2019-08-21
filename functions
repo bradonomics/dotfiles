@@ -57,13 +57,6 @@ gitkraken() {
   rm -f gitkraken-amd64.deb
 }
 
-# Upgrade skype to the latest version
-skype() {
-  sudo wget https://repo.skype.com/latest/skypeforlinux-64.deb
-  sudo gdebi --non-interactive skypeforlinux-64.deb
-  rm -f skypeforlinux-64.deb
-}
-
 # Upgrade calibre to lastest verion
 calibre() {
   wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
