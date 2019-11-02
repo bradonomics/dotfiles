@@ -23,28 +23,41 @@ if [ -d "$HOME/.rbenv" ]; then
   export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 fi
 
-# Add local NPM directory to $PATH
+# Add Python directories to $PATH
+if [ -d "$HOME/.pyenv" ]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+  fi
+fi
+
+# Add NPM directory to $PATH
 if [ -d "$HOME/.npm" ]; then
   export PATH="$HOME/.npm/bin:$PATH"
 fi
 
 # WP CLI Auto Complete
 if [ -f "$HOME/.wp-completion.bash" ]; then
+  # shellcheck source=/home/brad/
   . "$HOME/.wp-completion.bash"
 fi
 
 # Alias definitions
 if [ -f "$HOME/.bash_aliases" ]; then
+  # shellcheck source=/home/brad/
   . "$HOME/.bash_aliases"
 fi
 
 # Functions
 if [ -f "$HOME/.functions" ]; then
+  # shellcheck source=/home/brad/
   . "$HOME/.functions"
 fi
 
-# Run bash-prompt with git
+# Git enabled bash-prompt
 if [ -f "$HOME/.bash_prompt" ]; then
+  # shellcheck source=/home/brad/
   . "$HOME/.bash_prompt"
 fi
 
@@ -52,5 +65,5 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
+  . /etc/bash_completion
 fi
