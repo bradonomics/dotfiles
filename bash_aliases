@@ -7,6 +7,7 @@ alias la='ls -A'
 
 alias dot="cd ~/.dotfiles"
 alias brad="cd ~/Projects/bradonomics.com"
+alias thai="cd ~/Projects/thailandetcetera.com"
 
 # Git shortcuts
 alias stash="git stash --include-untracked"
@@ -43,7 +44,7 @@ alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/download
 
 # Jekyll build and serve commands when using Bundler
 alias build-bundle='bundle exec jekyll build'
-alias serve-bundle='parallelshell "bundle exec jekyll build --watch" "browser-sync start --server '_site' --files '_site'"'
+alias serve-bundle='parallelshell "bundle exec jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
 
 # Jekyll build and serve commands using dev config and without Bundler
 alias build='jekyll build --config _config.yml,_config-dev.yml'
