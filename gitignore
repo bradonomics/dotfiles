@@ -3,18 +3,11 @@ cloudcannon*
 ### Jekyll ###
 _site
 .jekyll-metadata
-.jekyll-cache
+*-cache/
 Gemfile.lock
 
 
-### Travel Tripper ###
-media.json
-models.json
-sitemap.json
-
-
 ### NPM ###
-.sass-cache
 /node_modules/
 
 
