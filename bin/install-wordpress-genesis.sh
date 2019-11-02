@@ -66,7 +66,7 @@ RESPONSE=${RESPONSE,,}
 
 if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
   graceful_exit
-if
+fi
 
 # Check if Apache is running and start it if not
 START="sudo service apache2 start"
