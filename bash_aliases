@@ -42,10 +42,6 @@ alias iplocal="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 # Speedtest
 alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test10.zip'
 
-# Jekyll build and serve commands when using Bundler
-alias build-bundle='bundle exec jekyll build'
-alias serve-bundle='parallelshell "bundle exec jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
-
-# Jekyll build and serve commands using dev config and without Bundler
-alias build='jekyll build --config _config.yml,_config-dev.yml'
-alias serve='parallelshell "jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
+# Jekyll build and serve commands, with much wow
+alias build='bundle exec jekyll build --config _config.yml,_config-dev.yml'
+alias serve='parallelshell "bundle exec jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
