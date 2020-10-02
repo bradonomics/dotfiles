@@ -1,6 +1,6 @@
 #!/bin/bash
 # ---------------------------------------------------------------------------
-# Copyright 2017, Brad West
+# Copyright 2020, Brad West
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -21,25 +21,27 @@ error_exit() {
 }
 
 echo "You should be in the directory where you want to install your Jekyll project."
-echo "If you are not in the project directory, abort this script, create the project directory, and start again."
+echo "If you are not in the project directory, abort this script, create the project directory, and start again from there."
+echo ''
 read -r -p "Are you in the poject directory? [y/N] " RESPONSE
-# RESPONSE=${RESPONSE,,}
-if [[ $RESPONSE =~ ^(no|n| ) ]] || [ -z $RESPONSE ]; then
+RESPONSE=${RESPONSE,,}
+if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
   exit
 fi
 
-# Download Jekyll Boilerplate theme files
-wget https://github.com/bradonomics/jekyll-boilerplate/archive/master.tar.gz
+# Download Bedrock files
+git clone git@gitlab.com:webniyom/bedrock.git
 
-# Unzip Jekyll Boilerplate theme files
-tar -zxf master.tar.gz
-cd jekyll-boilerplate-master || error_exit "Could not change directories."
+# move files up one level into project directory
+cd bedrock || error_exit "Failed to change directories."
 cp -rpf ./* ../
-cd ../ || error_exit "Could not change directories."
+cd ../ || error_exit "Failed to change directories."
 
-# Delete Jekyll Boilerplate zip flies
-rm -rf jekyll-boilerplate-master/
-rm -f master.tar.gz
+# Delete empty bedrock directory
+rm -rf bedrock/
+
+# Delete .git directory from cloned repo
+rm -rf .git/
 
 # Output "finished" note
 echo "Everything should now be setup and ready for you to start your new Jekyll project."

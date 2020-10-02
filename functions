@@ -50,13 +50,6 @@ disable-mysql() {
   sudo systemctl disable mysql
 }
 
-# Upgrade gitkraken to the latest version
-gitkraken() {
-  sudo wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
-  sudo gdebi --non-interactive gitkraken-amd64.deb
-  rm -f gitkraken-amd64.deb
-}
-
 # Upgrade calibre to lastest verion
 calibre() {
   wget -nv -O- https://download.calibre-ebook.com/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
@@ -80,6 +73,33 @@ function c() {
 	else
 		code "$@";
 	fi;
+}
+
+# `s` with no arguments opens the current directory in Sublime Text
+# otherwise opens the given location
+function s() {
+  if [ $# -eq 0 ]; then
+    subl .;
+  else
+    subl "$@";
+  fi;
+}
+
+# Change kernel settings in /etc/sysctl.conf for performance improvments.
+# Info found here: https://youtu.be/DrkZIT7w7Hc
+# TODO: Make future proof by checking each value and adjusting individually.
+function swappiness() {
+  if grep -q "Reduce the swap tendency" /etc/sysctl.conf; then
+    return
+  else
+    echo "#####################################################" >> /etc/sysctl.conf
+    echo "# Reduce the swap tendency" >> /etc/sysctl.conf
+    echo "# Info found here: https://youtu.be/DrkZIT7w7Hc" >> /etc/sysctl.conf
+    echo "vm.swappiness = 10" >> /etc/sysctl.conf
+    echo "vm.vfs_cache_pressure = 50" >> /etc/sysctl.conf
+    echo "vm.watermark_scale_factor = 200" >> /etc/sysctl.conf
+    echo "vm.dirty_ratio = 3" >> /etc/sysctl.conf
+  fi;
 }
 
 # Runs all symlink functions (usful when installing a new system)
@@ -193,27 +213,61 @@ renamefiles() {
   for file in $FILES; do
     mv "$file" "${file/${OLD}/${NEW}}"
   done
+
+  # The below worked better for removeing all hypens in the file name not only the first as the loop above did.
+  # Test before replacing
+
+  # for file in $FILES; do
+  #   mv "$file" `echo $file | tr '$OLD' '$NEW'`
+  # done
 }
 
-# Remove empty directories in current directory
-removeempties() {
+# Delete empty directories on Kindle
+cleankindle() {
+
+  # Loop through directories in current directory
   for directory in "${PWD}"/*; do
-    if [[ $(ls -A "$directory") ]]; then
-      true
+    # Check that it's a directory and not a file
+    if [[ -d "$directory" ]]; then
+      # Loop through all the files in this directory and look for .fuse_hidden files
+      for FILE in "$directory"/.fuse_hidden*; do
+        # If .fuse_hidden file is found, delete it.
+        if [ -e "$FILE" ]; then
+          rm "$FILE"
+        fi
+      done
+    # If it's a file, continue the loop
     else
+      continue
+    fi
+  done
+
+  # Loop through directories in current directory
+  for directory in "${PWD}"/*; do
+    # Check if files exist in current directory
+    if [[ ! $(ls -A "$directory") ]]; then
+      # Delete directory if no files exist
       rm -rf "$directory"
     fi
   done
+
 }
 
-# List NPM packages without dependencies
+# NPM shortcuts
 npm() {
-  if [ $1 == "list" ]; then
+  if [ $1 == "list" ]; then # List NPM packages without dependencies
     command npm list --depth=0 "${@:2}";
     echo "For a list with dependencies, use 'ls'.";
+  elif [ $1 == "install" ] && [ $2 == "dev" ]; then # Install NPM dev packages
+    command npm install --only=dev;
   else
     command npm "$@";
   fi
+}
+
+# Append format option to rspec commands
+rspec() {
+  command rspec "$@" --format documentation
 }
 
 # Update rbenv & avaliable Ruby versions
@@ -222,7 +276,24 @@ rbenv-update() {
   git -C ~/.rbenv/plugins/ruby-build/ pull --verbose
 }
 
+# rbenv shortcuts
+rbenv() {
+  if [ $1 == "list" ]; then # List rbenv versions
+    command rbenv install -l;
+  else
+    command rbenv "$@";
+  fi
+}
+
 # Update pyenv
 pyenv-update() {
   git -C ~/.pyenv/ pull --verbose
 }
+
+# Plex Media Server
+# sudo systemctl disable snap.plexmediaserver.plexmediaserver.service
+# disable = disable autostart
+# enable = enable autostart
+# start = start service
+# stop = stop service
+# status = report current status

@@ -5,9 +5,25 @@ alias rebash='source ~/.bashrc'
 alias ll='ls -alF'
 alias la='ls -A'
 
-alias dot="cd ~/.dotfiles"
+alias dot="atom ~/.dotfiles"
+
+# Project directories
 alias brad="cd ~/Projects/bradonomics.com"
 alias thai="cd ~/Projects/thailandetcetera.com"
+alias akaligo="cd ~/Projects/akaligo.com"
+alias bedrock="cd ~/Projects/webniyom/bedrock"
+alias webniyom="cd ~/Projects/webniyom/webniyom.com"
+alias showcase="cd ~/Projects/webniyom/templates/showcase"
+alias academy="cd ~/Projects/webniyom/templates/academy"
+alias authority="cd ~/Projects/webniyom/templates/authority"
+alias phantom="cd ~/Projects/webniyom/templates/phantom"
+alias brisket="cd ~/Projects/webniyom/templates/brisket"
+alias threshold="cd ~/Projects/webniyom/templates/threshold"
+alias prag="cd ~/Projects/pragmatic/rails-studio/flix"
+
+# Populus directories
+alias elite="cd ~/Projects/populus/elite"
+alias ace="cd ~/Projects/populus/ace-cash-express"
 
 # Git shortcuts
 alias stash="git stash --include-untracked"
@@ -15,11 +31,12 @@ alias pop="git stash pop"
 
 # APT shortcuts
 alias update='sudo apt update'
+alias upgrade='sudo apt update && sudo apt -y upgrade'
 alias install='sudo apt install'
 alias remove='sudo apt remove'
 
 # Services
-alias start-mongo='sudo service mongod start'
+# alias start-mongo='sudo service mongod start'
 
 # Make echo $PATH readable
 alias path='echo $PATH | tr ":" "\n"'
@@ -39,9 +56,9 @@ alias ip='curl ipinfo.io/ip'
 # Get Local IPs
 alias iplocal="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 
-# Speedtest
-alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test10.zip'
-
-# Jekyll build and serve commands, with much wow
-alias build='bundle exec jekyll build --config _config.yml,_config-dev.yml'
-alias serve='parallelshell "bundle exec jekyll build --watch --config _config.yml,_config-dev.yml" "browser-sync start --server '_site' --files '_site'"'
+# Jekyll clean, build, and serve commands, with much wow
+alias clean='bundle exec jekyll clean'
+alias build='bundle exec jekyll build'
+# alias serve='parallelshell "bundle exec jekyll serve --livereload" "~/.local/share/firefox_dev/firefox 'http://localhost:4000/'"'
+alias serve='parallelshell "bundle exec jekyll serve --livereload" "google-chrome 'http://localhost:4000/'"'
+alias serve-bs='parallelshell "bundle exec jekyll build --watch" "browser-sync start --server '_site' --files '_site' --browser '~/.local/share/firefox_dev/firefox'"'

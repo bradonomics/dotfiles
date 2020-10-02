@@ -4,7 +4,6 @@ cloudcannon*
 _site
 .jekyll-metadata
 *-cache/
-Gemfile.lock
 
 
 ### NPM ###

@@ -62,6 +62,7 @@ ppa_install_list=(
   ppa:oranchelo/oranchelo-icon-theme
   ppa:system76/pop
   ppa:embrosyn/cinnamon
+  ppa:git-core/ppa
 )
 
 # Array of packages to install with a single apt install command

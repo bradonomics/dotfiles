@@ -61,10 +61,8 @@ done
 echo "You should be in the themes directory not in the project directory."
 echo "If you already created the project directory, abort this script, delete the project directory, and start again in wp-content/themes."
 read -r -p "Are you in the themes directory? [y/N] " RESPONSE
-
-RESPONSE=${RESPONSE,,}
-
-if [[ $RESPONSE =~ ^(no|n| ) ]] | [ -z $RESPONSE ]; then
+# RESPONSE=${RESPONSE,,}
+if [[ $RESPONSE =~ ^(no|n| ) ]] || [ -z $RESPONSE ]; then
   graceful_exit
 fi
 
