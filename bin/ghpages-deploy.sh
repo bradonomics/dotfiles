@@ -40,7 +40,7 @@ rm -rf $HOME/.tmp/jekyll
 mkdir -p $HOME/.tmp/jekyll
 
 # Build Jekyll and output to temp directory
-JEKYLL_ENV=production jekyll build --destination $HOME/.tmp/jekyll
+JEKYLL_ENV=production bundle exec jekyll build --destination $HOME/.tmp/jekyll
 
 # Checkout gh-pages branch
 git checkout gh-pages
